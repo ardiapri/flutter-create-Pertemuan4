@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'counter_page.dart'; // ✅ tambah ini
 
-class DashboardPage extends StatelessWidget {
+class CounterPage extends StatefulWidget {
+  @override
+  _CounterPageState createState() => _CounterPageState();
+}
+
+class _CounterPageState extends State<CounterPage> {
+  int counter = 0;
+
+  void tambah() {
+    setState(() => counter++);
+  }
+
+  void kurang() {
+    setState(() {
+      if (counter > 0) counter--;
+    });
+  }
+
+  void reset() {
+    setState(() => counter = 0);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Quantum Dashboard"),
+        title: Text("Quantum Counter"),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
       body: Stack(
         children: [
 
-          Positioned.fill(
-            child: QuantumBackground(),
-          ),
+          // 🔥 Background animasi
+          Positioned.fill(child: QuantumBackground()),
 
           Container(
-            width: double.infinity,
-            height: double.infinity,
             color: Colors.black.withOpacity(0.7),
           ),
 
@@ -47,6 +61,7 @@ class DashboardPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
 
+                  // 🔹 Icon Glow
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -57,108 +72,101 @@ class DashboardPage extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: Icon(Icons.account_circle,
-                        size: 70, color: Colors.cyanAccent),
+                    child: Icon(Icons.calculate,
+                        size: 60, color: Colors.cyanAccent),
                   ),
 
-                  SizedBox(height: 10),
+                  SizedBox(height: 15),
 
                   Text(
-                    "WELCOME",
+                    "COUNTER",
                     style: TextStyle(
                       color: Colors.cyanAccent,
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2,
                     ),
                   ),
 
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
 
-                  // Username
+                  // 🔢 Angka Counter
                   Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.cyanAccent),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.person, color: Colors.cyanAccent),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            "Username: ${data['username']}",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Password
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.purpleAccent),
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.lock, color: Colors.purpleAccent),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            "Password: ${data['password']}",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      "$counter",
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
                   SizedBox(height: 20),
 
-                  // 🔥 BUTTON COUNTER (BARU)
+                  // 🔘 Tombol + dan -
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: kurang,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          side: BorderSide(color: Colors.redAccent),
+                          padding: EdgeInsets.all(15),
+                        ),
+                        child: Icon(Icons.remove, color: Colors.redAccent),
+                      ),
+
+                      SizedBox(width: 20),
+
+                      ElevatedButton(
+                        onPressed: tambah,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          side: BorderSide(color: Colors.cyanAccent),
+                          padding: EdgeInsets.all(15),
+                        ),
+                        child: Icon(Icons.add, color: Colors.cyanAccent),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 20),
+
+                  // 🔄 Reset
                   ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CounterPage()),
-                      );
-                    },
-                    icon: Icon(Icons.calculate, color: Colors.cyanAccent),
+                    onPressed: reset,
+                    icon: Icon(Icons.refresh, color: Colors.purpleAccent),
                     label: Text(
-                      "COUNTER",
-                      style: TextStyle(color: Colors.cyanAccent),
+                      "RESET",
+                      style: TextStyle(color: Colors.purpleAccent),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                      side: BorderSide(color: Colors.cyanAccent),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                      side: BorderSide(color: Colors.purpleAccent),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     ),
                   ),
 
                   SizedBox(height: 10),
 
-                  // EXIT
+                  // 🔙 Back
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.logout),
-                    label: Text("EXIT"),
+                    icon: Icon(Icons.arrow_back),
+                    label: Text("BACK"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                      side: BorderSide(color: Colors.redAccent),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
+                      side: BorderSide(color: Colors.cyanAccent),
                     ),
                   )
                 ],
@@ -171,7 +179,7 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
-// BACKGROUND (tetap sama)
+// 🔥 Background animasi sama seperti dashboard
 class QuantumBackground extends StatefulWidget {
   @override
   _QuantumBackgroundState createState() => _QuantumBackgroundState();
